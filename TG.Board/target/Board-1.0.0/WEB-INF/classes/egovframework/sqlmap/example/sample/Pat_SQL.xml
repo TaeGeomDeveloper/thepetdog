@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="memberSpace">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="PatVO" type="egovframework.example.sample.service.PatVO"/>
+
+	<resultMap id="pat" class="egovframework.example.sample.service.PatVO">
+		<result property="pno" column="pno"/>
+		<result property="name" column="name"/>
+		<result property="age" column="age"/>
+		<result property="classification" column="classification"/>
+		<result property="m_id" column="m_id"/>
+	</resultMap>
+
+	<insert id="patDAO.insertPatList">
+		<selectKey keyProperty="pno" resultClass="java.lang.Integer">
+			SELECT ifnull(MAX(pno)+1,0) FROM t_pat
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO t_pat 
+				(pno
+				, name
+				, age
+				, classification
+				, m_id) 
+			VALUES (
+			#pno#
+			, #name#
+			, #age#
+			, #classification#
+			, #m_id#)
+		]]>
+	</insert>
+
+	<update id="patDAO.updatePatList">
+		<![CDATA[
+			UPDATE t_pat
+			SET name=#name#
+				, age=#age#
+				, classification=#classification#
+			WHERE pno=#pno#
+		]]>
+	</update>
+
+	<select id="patDAO.SelectPatList" resultClass="PatVO">
+		select * from t_pat
+	</select>
+
+	<delete id="patDAO.deletePatList">
+		<![CDATA[
+			DELETE FROM t_pat 
+			WHERE pno=#pno#
+		]]>
+	</delete>
+
+</sqlMap>

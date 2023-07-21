@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="member">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="MemberVO" type="egovframework.example.sample.service.MemberVO"/>
+	
+    <typeAlias type="java.util.hashMap" alias="hash"/>
+	
+	<resultMap id="member" class="egovframework.example.sample.service.MemberVO">
+		<result property="id" column="id"/>
+		<result property="pwd" column="pwd"/>
+		<result property="name" column="name"/>
+		<result property="email" column="email"/>
+		<result property="joinDate" column="joinDate"/>
+	</resultMap>
+	
+	<insert id="memberDAO.insertMember">
+		<![CDATA[
+			INSERT INTO t_member 
+				( ID
+				  , PWD
+				  , NAME
+				  , EMAIL )
+			VALUES ( #id#
+				  , #pwd#
+				  , #name#
+				  , #email# )
+		]]>
+	</insert>
+	
+	<select id="memberDAO.SelectMemberList" resultClass="MemberVO">
+		select * from t_member
+	</select>
+
+	<select id="memberDAO.selectListTotCnt" resultClass="int"> 
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM t_member 
+			WHERE id = #{mi_id}#
+		]]>
+    </select>
+    
+    <select id="memberDAO.SelectOneMemberList" resultClass="MemberVO">
+    	<![CDATA[
+			select * from t_member
+			WHERE id = #{id}# and pwd = #{pwd}#
+		]]>
+	</select>
+    
+     <select id="memberDAO.checkMember" resultClass="MemberVO">
+      <![CDATA[
+        select ID, PWD, NAME, EMAIL, JOINDATE
+        FROM t_member
+        where
+            id = #mi_id# and pwd = #mi_password#
+        ]]>
+    </select>
+
+</sqlMap>

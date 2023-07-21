@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="memberSpace">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="NoticeVO" type="egovframework.example.sample.service.NoticeVO"/>
+
+	<resultMap id="NoticeVO" class="egovframework.example.sample.service.NoticeVO">
+		<result property="nb_seq" column="nb_seq" />
+        <result property="nb_id" column="nb_id" />
+        <result property="nb_name" column="nb_name" />
+        <result property="nb_title" column="nb_title" />
+        <result property="nb_content" column="nb_content" />
+        <result property="nb_viewCount" column="nb_viewCount" />
+        <result property="nb_regDate" column="nb_regDate" />
+        <result property="nb_originFileName" column="nb_originFileName" />
+        <result property="nb_serverFileName" column="nb_serverFileName" />
+        <result property="nb_downloadCount" column="nb_downloadCount" />
+	</resultMap>
+
+<!-- 	<select id="noticeDAO.SelectNoticeBoardList" resultClass="NoticeVO">
+		select * from t_noticeboard
+	</select> -->
+
+	<select id="noticeDAO.SelectAllList" resultClass="NoticeVO">
+		<![CDATA[
+		select * from t_noticeboard order by nb_seq desc
+		]]>
+	</select>
+	
+	<select id="noticeDAO.SelectList" resultClass="NoticeVO">
+		<![CDATA[
+		select * from t_noticeboard order by nb_seq desc limit #page#, 10
+		]]>
+	</select>
+	
+	<select id="noticeDAO.selectOneNoticeBySeq" resultClass="NoticeVO" >
+        <![CDATA[
+        select * from t_noticeboard where nb_seq=#nb_seq#
+        ]]>
+    </select>
+	
+	<update id="noticeDAO.updateNotice">
+		<![CDATA[
+			update t_noticeboard
+        	set nb_title=#nb_title#, nb_content=#nb_content#, nb_originFileName=#nb_originFileName#, nb_serverFileName=#nb_serverFileName#, nb_regDate=now()
+        	where nb_seq=#nb_seq#
+		]]>
+	</update>
+	
+	<delete id="noticeDAO.deleteOneNotice">
+		<![CDATA[
+			DELETE FROM t_noticeboard
+			WHERE nb_seq=#nb_seq#
+		]]>
+	</delete>
+	
+	
+	<insert id="noticeDAO.insertNotice">
+		<selectKey keyProperty="nb_seq" resultClass="java.lang.Integer">
+			SELECT ifnull(MAX(nb_seq)+1,0) FROM t_noticeboard
+		</selectKey>
+        <![CDATA[
+			INSERT INTO t_noticeboard
+				(nb_seq
+				, nb_id
+				, nb_name
+				, nb_title
+				, nb_content
+				, nb_originFileName
+				, nb_serverFileName)
+			VALUES (
+			#nb_seq#,
+			#nb_id#,
+			#nb_name#,
+			#nb_title#,
+			#nb_content#,
+			#nb_originFileName#,
+			#nb_serverFileName#)
+		]]>
+    </insert>
+
+</sqlMap>
